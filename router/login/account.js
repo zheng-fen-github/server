@@ -119,4 +119,36 @@ router.post('/registered',upload.none(),async (req,res) =>{
      }
 })
 
+router.post('/updateAc',upload.none(),async (req,res) => {
+    console.log('修改个人信息');
+    console.log(req.cookies);      
+    console.log(req.body);
+    let account;
+    if(req.cookies.account){
+           account = req.cookies.account ;
+    }else{        
+           account = req.body.account ;
+
+    }
+          
+    let userData = await  mongodb.findOne({account});
+    if(userData) {
+        let {message} = userData;    
+        message.name = req.body.name;
+        message.Introduction = req.body.outermessage;
+        let newData = await  mongodb.findOneAndUpdate({account},
+            {message},
+            {new:true});
+        res.status(200).json(newData);
+    }else{
+        res.status(404).json('未获取账号信息');
+    }
+    
+    
+   
+    
+})
+
+
+
 module.exports =router

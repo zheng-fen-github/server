@@ -7,7 +7,7 @@ const multer = require('multer');
 const cors = require('cors');
 const cookieparser = require('cookie-parser');
 let cif = {
-    origin:'http://49.234.96.80:3000',
+    origin:'http://localhost:3000',
     credentials: true,
 }
 
@@ -204,9 +204,8 @@ router.post('/comment/:id',parse.none(),async(req,res) => {
 router.get('/',async (req,res) => {
     console.log('获取帖子数据');
     let data = await mongodb2.where('userName');
-    setTimeout(() => {
-        res.json(data);
-    })
+    res.json(data);
+  
 })
 
 
