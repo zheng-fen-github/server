@@ -4,7 +4,7 @@ const multer = require('multer');
 const cors = require('cors');
 const mongodb = require('./data/mongoose.js')
 
-const cookie = require('./router/cookie')
+
 const uploadUserPhoto = require('./router/postPhotos/test');
 const notes = require('./router/notes')
 const form = multer();
