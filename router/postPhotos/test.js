@@ -6,7 +6,7 @@ const mongodb = require('../../data/mongoose');
 const cors = require('cors');
 const cookieparser = require('cookie-parser');
 let cif = {
-    origin:'http://localhost:3000',
+    origin:'http://49.234.96.80:3000',
     credentials: true,
 }
 

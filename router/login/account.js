@@ -7,7 +7,7 @@ let upload = multer();
 const cors = require('cors');
 
 let cif = {
-    origin:'http://localhost:3000',
+    origin:'http://49.234.96.80:3000',
     credentials: true,
 }
 router.use(cookieparser());

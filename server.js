@@ -19,7 +19,7 @@ const ins = require('./router/ins/post')
 
 app.use(express.json());
 let cif = {
-    origin:'http://localhost:3000',
+    origin:'http://49.234.96.80:3000',
     credentials: true,
 }
 app.use(cors(cif));
@@ -46,8 +46,8 @@ app.use('/login',login)
 const get  = require('./router/postPhotos/getPhoto')
 app.use('/getphoto',get)
 
-const comment = require('./router/comment/comment') //帖子评论路由
-app.use('/comment',comment)
+// const comment = require('./router/comment/comment') //帖子评论路由
+// app.use('/comment',comment)
 
 
 // 验证账号
