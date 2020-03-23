@@ -18,7 +18,7 @@ const model = mongoose.model('ins',{
     acthorPhotoId:String,
     userSave:Array,
     userLike:Array,
-    
+    account:String,
 },'ins');
 
 
