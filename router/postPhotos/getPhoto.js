@@ -73,7 +73,8 @@ router.use(fileUpload())
         description:message,
         title:PostTitle,
         acthorPhotoId:acthorPhotoId,
-    }).save().then(res => console.log(res));
+        account:account,
+    }).save().then(() => console.log('添加帖子信息--成功'));
     
 
     res.status(200).json('帖子已发布');
