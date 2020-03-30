@@ -210,6 +210,7 @@ router.get('/',async (req,res) => {
     let data = await mongodb2.where('userName');
     res.json(data);
   
+
 })
 router.get('/post/:id',async (req,res) => {
     console.log('获取帖子数据');
@@ -221,8 +222,6 @@ router.get('/post/:id',async (req,res) => {
     }else{
         res.status(404).json('未找到这个帖子数据')
     }
-    
-  
 })
 
 

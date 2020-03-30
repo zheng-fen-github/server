@@ -81,6 +81,23 @@ router.use(fileUpload())
     let undate2 = await mongodb.findOneAndUpdate({account},
         {message:data},
         {new:true});
+
+
+
+    let imageAr = FileMessage.map(data => ({
+        filename:data,
+        time:Date.now(),  
+    }));
+    new mongodb2({
+        postId,
+        userName:userName,
+        message:imageAr,
+        description:message,
+        title:PostTitle,
+        acthorPhotoId:acthorPhotoId,
+        account:account,
+    }).save().then(() => console.log('添加帖子信息--成功'));
+
     
     res.status(200).json({
         postId,
@@ -109,4 +126,7 @@ router.get('/:id',(req,res) => {  //帖子图片获取路径
 
 
 
+
 module.exports  = router;
+
+

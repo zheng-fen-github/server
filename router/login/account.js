@@ -151,7 +151,11 @@ router.post('/updateAc',upload.none(),async (req,res) => {
            account = req.body.account ;
 
     }
+
     console.log(account);      
+
+          
+
     let userData = await  mongodb.findOne({account});
     if(userData) {
         let {message} = userData;    
@@ -197,5 +201,7 @@ router.post('/changePass' , upload.none() , async (req,res) => {
     }
      
 })
+
+
 
 module.exports =router
