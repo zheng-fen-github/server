@@ -3,13 +3,13 @@ const router = express.Router();
 const mongodb = require('../../data/mongoose.js')
 const mongodb2 = require('../../data/mongoose-post.js')
 const path = require('path');
-
+const io = require('../../server.js');
 
 const fileUpload = require('express-fileupload');  // 上传文件设置
 router.use(fileUpload())
 
  router.post('/post' , async (req,res)=>{
-
+ 
       console.log('upload files');
    
 
@@ -45,10 +45,31 @@ router.use(fileUpload())
     console.log(req.body);
     let {account,userName,acthorPhotoId,message,PostTitle} = req.body;    
     if(!acthorPhotoId || !message || !PostTitle || !account   || !userName) {
-        res.status(404).json('缺少重要信息');
+      return  res.status(404).json('缺少重要信息');
     }
-    let postId = Date.now() + account;
     
+
+    let postId;  // 帖子id 定义
+    let imageAr = FileMessage.map(data => ({
+        filename:data,
+        time:Date.now(),  
+    }));
+    await new mongodb2({
+        postId:postId,
+        userName:userName,
+        message:imageAr,
+        description:message,
+        title:PostTitle,
+        acthorPhotoId:acthorPhotoId,
+        account:account,
+    }).save().then(res =>{
+         console.log(res._id);
+         console.log('object')
+         postId = res._id;
+
+    });
+    
+    console.log(postId +'  ' + acthorPhotoId + ' ' + PostTitle);
     
     let user = await mongodb.findOne({account});
     let data = user.message;
@@ -60,26 +81,15 @@ router.use(fileUpload())
     let undate2 = await mongodb.findOneAndUpdate({account},
         {message:data},
         {new:true});
-
-
-    let imageAr = FileMessage.map(data => ({
-        filename:data,
-        time:Date.now(),  
-    }));
-    new mongodb2({
-        postId,
-        userName:userName,
-        message:imageAr,
-        description:message,
-        title:PostTitle,
-        acthorPhotoId:acthorPhotoId,
-    }).save().then(res => console.log(res));
     
-
-    res.status(200).json('帖子已发布');
+    res.status(200).json({
+        postId,
+        acthorPhotoId,
+        PostTitle,
+    });
      
     console.log('done')
-
+    
 
 });
 
@@ -88,9 +98,15 @@ router.get('/:id',(req,res) => {  //帖子图片获取路径
     console.log('获取帖子图片')
     console.log(req.params.id );
     console.log(path.join(__dirname,'/files'));
+    try {
     res.sendFile(path.join(__dirname,'/insFiles',req.params.id));
+    }catch(err) {
+        console.log(err);
+        res.status(404).json('not photo')
+    }
 
 })
+
 
 
 module.exports  = router;

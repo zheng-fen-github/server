@@ -4,7 +4,7 @@ const url = 'mongodb+srv://zhengfen:haoyunlai123@cluster0-4biyb.mongodb.net/test
 
 mongoose.connect(url,{useNewUrlParser:true,useUnifiedTopology: true});
 
-const model = mongoose.model('ins',{
+const model = mongoose.model('ins',{    
     postID:String,
     postTime:{
         type:Date,
@@ -18,7 +18,7 @@ const model = mongoose.model('ins',{
     acthorPhotoId:String,
     userSave:Array,
     userLike:Array,
-    
+    account:String,
 },'ins');
 
 

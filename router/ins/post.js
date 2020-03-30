@@ -179,36 +179,51 @@ router.post('/like/remove/:id',parse.none(),async(req,res) => {
 
 
 router.post('/comment/:id',parse.none(),async(req,res) => {
-    console.log(req.cookies)
+    
     console.log(req.params.id)
     console.log(req.body)
-    // if(!req.cookies.account) {
-    //         res.status(404).json('未获取账号信息')
-    // }
-    let postData = await mongodb2.findOne({_id:req.params.id});
-    let {comment} = postData;
-    comment.push({
-        user:req.cookies.account,
-        comment:req.body.comment,
-        time:Date.now(),
-    })
-    let undate = await mongodb2.findOneAndUpdate({_id:req.params.id},
-        {comment},
-        {new:true});
-     
+    console.log('添加评论')
     
+   try {
+    
+        let postData = await mongodb2.findOne({_id:req.params.id});
+        let {comment} = postData;
+        comment.push({
+            user:req.body.user,
+            comment:req.body.comment,
+            photo:req.body.photoId,
+            time:Date.now(),
+        })
+        let undate = await mongodb2.findOneAndUpdate({_id:req.params.id},
+            {comment},
+            {new:true});
         res.status(200).json(undate.comment)
+    } catch(err) {
+        console.log(err);
+        res.status(500).json('error')
+    }  
 
 })
 
 router.get('/',async (req,res) => {
     console.log('获取帖子数据');
     let data = await mongodb2.where('userName');
-    setTimeout(() => {
-        res.json(data);
-    })
+    res.json(data);
+  
 })
-
+router.get('/post/:id',async (req,res) => {
+    console.log('获取帖子数据');
+    console.log(req.params.id);
+    
+    let data = await mongodb2.findOne({_id:req.params.id});
+    if(data) {
+        res.json(data);
+    }else{
+        res.status(404).json('未找到这个帖子数据')
+    }
+    
+  
+})
 
 
 

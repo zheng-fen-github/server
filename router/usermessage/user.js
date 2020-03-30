@@ -6,8 +6,8 @@ const mongodb = require('../../data/mongoose')
 router.get('/:account', async(req,res)=>{
     console.log(req.params.account)
     let userphoto = await mongodb.findOne({account:req.params.account});
-    let {avatar} = userphoto;
-    res.json(avatar);
+    
+    res.json( userphoto);
 });
 
 

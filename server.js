@@ -16,10 +16,11 @@ const login = require('./router/login/account.js')
 
 const ins = require('./router/ins/post')
 
+const socket = require('socket.io')
 
 app.use(express.json());
 let cif = {
-    origin:'http://49.234.96.80:3000',
+    origin:'http://localhost:3000',
     credentials: true,
 }
 app.use(cors(cif));
@@ -94,4 +95,24 @@ app.put('/:id',async (req,res)=>{
 
 
 
-app.listen(3001,()=>console.log('server started ....'))
+const server = app.listen(3001,()=>console.log('server started ....'));
+
+let io = socket(server);
+
+io.on('connection',(socket) => {
+    console.log('made socket connection',socket.id);   
+
+    socket.on('chat',(data) => {
+        console.log(data.message);
+        io.sockets.emit('chat',data);
+    })
+    socket.on('post',(data) => {
+       console.log(data);
+       io.sockets.emit('chat',data); 
+    })
+})
+
+
+
+module.exports = io;
+

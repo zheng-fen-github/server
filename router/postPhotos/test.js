@@ -27,8 +27,10 @@ router.post('/avatar',async (req,res)=>{
     //       return res.status(404).json('未获取账号信息');
     //    }
        if(req.files === null) {
-        return res.status(404).json('no file')
+        return res
+        .status(404).json('no file')
       } 
+    try{  
       const file = req.files.file;
       let fileName =  Date.now()+file.name;
       console.log(fileName);
@@ -38,7 +40,7 @@ router.post('/avatar',async (req,res)=>{
               return res.status(500).send(err)
           }
       })   
-      try{    
+       
         let {message} = await mongodb.findOne({account:req.cookies.account});       
         console.log(message); // 用户信息       
         message.photoId= fileName;
@@ -47,7 +49,6 @@ router.post('/avatar',async (req,res)=>{
         {new:true});
         console.log(fileName);
         res.sendFile(path.join(__dirname,'files',fileName))
-
     } catch(err) {
         console.log(err);
     }
@@ -65,19 +66,6 @@ router.get('/:id',(req,res) => {  //用户头像获取路径
 
 
 
-
-
-// 更新图片信息
-// router.get('/', async(req,res)=>{
-//     console.log(req.cookies);
-//     if(req.cookies.account){
-//         let userData = await mongodb.findOne({account:req.cookies.account});
-//         let photosMessage = userData.photos;
-//         res.status(200).json(photosMessage)
-//       }else{
-//           res.status(404).send('user account is not found')
-//       }
-// });
 
 
 

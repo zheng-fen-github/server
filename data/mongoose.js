@@ -7,7 +7,7 @@ mongoose.connect(url,{useNewUrlParser:true,useUnifiedTopology: true});
 const model = mongoose.model('user',{
     account:String,
     password:String,
-    email:String,
+    email:String,    
     time:{
         type:Date,
         default:Date.now
@@ -19,6 +19,7 @@ const model = mongoose.model('user',{
         like:[],
         save:[],
         all:[],
+        Introduction:{ type: String },
     },
     chat:[
     ],

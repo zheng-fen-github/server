@@ -22,13 +22,34 @@ router.get('/:account', async(req,res)=>{
       }else{
          res.status(200).json(true);
       }
-      
-   }catch(err) {
-       console.log(err)
-   }
+        
+    }catch(err) {
+        console.log(err)
+    }
       
     
 });
+router.get('/user/:account', async(req,res)=>{        //3月23号 添加 user页面路由
+    try{
+      let user = await mongodb.findOne({account:req.params.account});
+      
+      if(!user) {
+          res.status(404).json('未找到账号');
+      }else{
+         
+         res.status(200).json(user.message);
+      }
+        
+    }catch(err) {
+        console.log(err)
+        res.status(500).json('error')
+    }
+      
+    
+});
+
+
+
 // 获取账号信息
 router.get('/',async (req,res) => {    // 测试cookie 是否获取的到
     console.log('cookie 查看 +++');
@@ -117,6 +138,64 @@ router.post('/registered',upload.none(),async (req,res) =>{
      }catch(err){
          if(err) console.log('server err :     '+err)
      }
+})
+
+router.post('/updateAc',upload.none(),async (req,res) => {
+    console.log('修改个人信息');
+    console.log(req.cookies);      
+    console.log(req.body);
+    let account;
+    if(req.cookies.account){
+           account = req.cookies.account ;
+    }else{        
+           account = req.body.account ;
+
+    }
+    console.log(account);      
+    let userData = await  mongodb.findOne({account});
+    if(userData) {
+        let {message} = userData;    
+        message.name = req.body.name;
+        message.Introduction = req.body.outermessage;
+        let newData = await  mongodb.findOneAndUpdate({account},
+            {message},
+            {new:true});
+        res.status(200).json(newData);
+    }else{
+        res.status(404).json('未获取账号信息');
+    }
+    
+    
+   
+    
+})
+
+router.post('/changePass' , upload.none() , async (req,res) => {
+     console.log(req.body);
+     let {account,oldpassword,newpassword_one} = req.body;
+     
+     let data = await mongodb.findOne({account});
+     if( !account || !data) {
+        res.status(404).json('未找到账号信息。重新登录试试！');
+    }
+    console.log(data);
+    let {password} = data;
+    if(password === oldpassword) {
+            try {
+                let newData = await  mongodb.findOneAndUpdate({account},
+                    {password:newpassword_one},
+                    {new:true});
+                console.log(newData);
+                res.status(200).json('修改成功');
+            }catch(err) {
+                console.log(err);
+                console.log('修改密码时出现错误');
+                res.status(500).json('服务器出小差');
+            }
+    }else{
+        res.status(500).json('密码错误！！');
+    }
+     
 })
 
 module.exports =router
