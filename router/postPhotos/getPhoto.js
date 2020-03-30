@@ -84,10 +84,8 @@ router.use(fileUpload())
 
 
 
-    let imageAr = FileMessage.map(data => ({
-        filename:data,
-        time:Date.now(),  
-    }));
+    
+    
     new mongodb2({
         postId,
         userName:userName,
