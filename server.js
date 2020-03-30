@@ -20,7 +20,7 @@ const socket = require('socket.io')
 
 app.use(express.json());
 let cif = {
-    origin:'http://49.234.96.80/:3000',
+    origin:'http://49.234.96.80:3000',
     credentials: true,
 }
 app.use(cors(cif));
